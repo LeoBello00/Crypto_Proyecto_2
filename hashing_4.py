@@ -16,8 +16,6 @@ def hash_password(password_flag,rows,hashes_to_compare):
         h.update(key)
         tmp = h.hexdigest()
         flag.value += 1
-        if (password == 'princesa'):
-            print('2000 password checked')
         if tmp in hashes_to_compare:
             username = row['username'].values[0]
             hashes_to_compare.remove(tmp)

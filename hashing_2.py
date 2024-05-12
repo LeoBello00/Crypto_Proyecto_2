@@ -19,7 +19,7 @@ def hash_password(password_flag,rows,hashes_to_compare):
     for row in rows:
         salt = row['salt'].values[0]
         h = SHA3_512.new(bytes(password, 'utf-8'))
-        h.update(bytes.fromhex(salt))
+        h.update(salt)
         tmp = h.hexdigest()
         if tmp in hashes_to_compare:
             username = row['username'].values[0]
@@ -37,7 +37,7 @@ def hash_passwords(passwords, rows):
     flag = manager.Value('i', 0)
     hashes_to_compare = [row['password'].values[0] for row in rows]
     print(hashes_to_compare)
-    with Pool(processes=10) as p:
+    with Pool(processes=16) as p:
         results = p.starmap(hash_password, zip(((password, flag)for password in passwords),repeat(rows),repeat(hashes_to_compare)))
     # Filter out None values (passwords not found) from results
     found_passwords = [password for password in results if password is not None]
